@@ -9,7 +9,7 @@
 - **Color-Coded Results** – Easily identify successful, redirected, and failed requests.
 - **Custom Wordlists Support** – Works seamlessly with custom subdomain and endpoint wordlists.
 
-![6qlzScanner Output](https://i.imgur.com/7X8zutO.png)
+![6qlzScanner Output](https://i.imgur.com/IJSHsFS.png)
 
 
 
