@@ -1,13 +1,16 @@
 # 6qlzScanner 
 
-6qlzScanner is a high-performance, multithreaded domain reconnaissance tool designed for security researchers, penetration testers, and bug bounty hunters. It efficiently probes domains, detects web technologies, and categorizes responses using color-coded output. Built with automation in mind, it streamlines the reconnaissance process, making it faster and more efficient for large-scale scanning.
+A high-performance, multithreaded domain reconnaissance tool crafted for security professionals who demand efficiency and precision. With intelligent automation, it swiftly probes domains, identifies web technologies, and presents results in an elegant, color-coded format. Designed for seamless large-scale scanning, 6qlzScanner combines power and sophistication to elevate your reconnaissance workflow.
 
 # Features
-- **Multithreaded Scanning** – Scan multiple domains simultaneously for maximum efficiency.
-- **Technology Detection** – Extracts web technologies from HTTP response headers.
-- **Structured Output** – Provides detailed status codes, IP addresses, and open ports.
-- **Color-Coded Results** – Easily identify successful, redirected, and failed requests.
-- **Custom Wordlists Support** – Works seamlessly with custom subdomain and endpoint wordlists.
+
+- **High-Performance Scanning** – Multithreaded architecture ensures lightning-fast reconnaissance.
+- **Advanced Domain Probing** – Detects web technologies, server details, and response patterns with precision.
+- **Color-Coded Output** – Intuitively categorized results for effortless analysis.
+- **Automation-Ready** – Designed for seamless integration into security workflows.
+- **Scalability** – Optimized for large-scale domain enumeration and reconnaissance.
+- **Lightweight & Efficient** – Minimal resource consumption for maximum performance.
+- **Customizable & Flexible** – Tailor scanning parameters to fit specific reconnaissance needs.
 
 ![6qlzScanner Output](https://i.imgur.com/IJSHsFS.png)
 
