@@ -4,22 +4,52 @@ import logging
 import socket
 import os
 import signal
+import shutil
 from colorama import Fore, Style, init
 
 # Initialize colorama
 init(autoreset=True)
 
+# Function to center text in terminal
+def center_text(text):
+    terminal_width = shutil.get_terminal_size().columns
+    return "\n".join(line.center(terminal_width) for line in text.split("\n"))
+
 # ASCII Art
 ASCII_ART = f"""
-{Fore.LIGHTRED_EX}
-  ____      __    ____ {Fore.LIGHTRED_EX}
- / __/___ _/ /__ / __/______ ____ ___ ___ ____ {Fore.LIGHTRED_EX}
-/ _ \/ _ `/ /_ /_\ \/ __/ _ `/ _ \/ _ \/ -_) __/ {Fore.RED}
-\___/\_, /_//__/___/\__/\_,_/_//_/_//_/\__/_/ v1.0 {Fore.RED}
-      /_/
------------ {Fore.RED}M{Fore.LIGHTRED_EX}a{Fore.RED}d{Fore.LIGHTRED_EX}e {Fore.RED}b{Fore.LIGHTRED_EX}y @{Fore.RED}6q{Fore.LIGHTRED_EX}l{Fore.RED}z ------------{Fore.RED}
-{Style.RESET_ALL}
+{Fore.RED}
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣤⣤⣶⣶⣶⣶⣶⣶⣠⣤⣤⣀⣀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣀⣴⣾⠿⠟⠛⠛⠉⠉⠉⠉⠉⠛⠛⠛⠿⠿⡿⠛⢿⣿⣷⣤
+⠀⠀⠀⣠⡾⠟⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⠉⠁
+⠀⢀⡾⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡟⠀⠀
+⢠⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⠁⠀⠀
+⠋⠀⠀⠀⠀⠀⠀⠀⢀⣤⣤⣤⣶⣶⣆⢤⣤⣀⣀⠀⠀⠀⠀⣸⡟⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢸⡿⠋⠙⢿⣿⣿⣿⣻⣿⣿⡇⠀⠀⠀⣿⠇⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⢀⠐⢻⣿⣻⣷⡽⣿⣷⠀⠀⢸⣿⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⣃⠹⠿⠗⣿⣷⣻⣿⡽⣿⣧⠀⣼⡇⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⡏⣁⢀⠲⣿⣿⣷⢻⣿⡽⣿⢀⣿⠁⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠁⣉⣡⣿⣿⣿⣏⣿⣿⣿⣼⡿⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢰⡿⣿⣿⣿⣿⣿⣿⣿⣿⣽⣿⣿⣿⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⠟⠛⠛⠛⠛⠛⠆⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠈⠛⠘⠛⠛⠛⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                                       v1.1
+  ____      __    ____                          
+ / __/___ _/ /__ / __/______ ____  ___  ___ ____
+/ _ \/ _ `/ /_ /_\ \/ __/ _ `/ _ \/ _ \/ -_) __/
+\___/\_, /_//__/___/\__/\_,_/_//_/_//_/\__/_/  
+      /_/                                       
+
+----------- Made by @6qlz ------------
+
+[1] Probe multiple domains from a file
+[2] Probe a single domain 
+ [3] Exit{Style.RESET_ALL} 
+ 
 """
+
+ASCII_ART = center_text(ASCII_ART)
+# Configure logging
+logging.basicConfig(format='%(message)s', level=logging.INFO)
 
 # Configure logging
 logging.basicConfig(format='%(message)s', level=logging.INFO)
@@ -92,7 +122,8 @@ class DomainProbe:
                         'port': port
                     })
                     break
-                except (requests.RequestException, socket.gaierror):
+
+                except (requests.RequestException, socket.gaierror) as e:
                     if attempt == self.retries:
                         logging.info(f"[{Fore.RED}Failed{Style.RESET_ALL}] {Fore.RED}{protocol}{domain}{Style.RESET_ALL} [{Fore.LIGHTRED_EX}FAILED{Style.RESET_ALL}] [Unresolved] [{port_color}{port}{Style.RESET_ALL}]")
                         results.append({
@@ -116,49 +147,61 @@ class DomainProbe:
                     results.extend(future.result())
                 except Exception as e:
                     logging.error(f"Error probing {domain}: {e}")
-        
-        if len(domains) > 1 and self.live_domains:
-            save_choice = input(f"\n{Fore.RED}[{Fore.WHITE}!{Fore.LIGHTRED_EX}]{Fore.RED} Do you want to save live domains to a file? (y/n): {Fore.WHITE}").strip().lower()
-            if save_choice == 'y':
-                save_file = input(f"{Fore.RED}[{Fore.WHITE}!{Fore.LIGHTRED_EX}]{Fore.RED} Enter filename to save live domains: {Fore.WHITE}").strip()
-                with open(save_file, 'w') as file:
-                    file.write("\n".join(self.live_domains))
-                print(f"\n{Fore.RED}[!{Fore.LIGHTRED_EX}]{Fore.RED} Live domains saved successfully!{Style.RESET_ALL}")
-        
         return results
 
-def print_menu():
-    print(f"{Fore.LIGHTRED_EX} [{Fore.WHITE}1{Fore.RED}]{Style.RESET_ALL} {Fore.WHITE}Probe multiple domains from a file{Style.RESET_ALL}")
-    print(f"{Fore.RED} [{Fore.WHITE}2{Fore.LIGHTRED_EX}]{Style.RESET_ALL} {Fore.WHITE}Probe a single domain{Style.RESET_ALL}")
-    print(f"{Fore.LIGHTRED_EX} [{Fore.WHITE}3{Fore.RED}]{Style.RESET_ALL} {Fore.WHITE}Exit{Style.RESET_ALL}")
-    print()
-    print()
-    print()
 
 def main():
     os.system('clear' if os.name == 'posix' else 'cls')
     print(ASCII_ART)
+
     while True:
-        print_menu()
         choice = input(f"{Fore.RED}[{Fore.WHITE}!{Fore.LIGHTRED_EX}]{Fore.RED} Choose an option: {Fore.WHITE}").strip()
+
         if choice == "1":
             file_path = input(f"{Fore.LIGHTRED_EX}[{Fore.WHITE}!{Fore.RED}] Enter the file path: {Fore.WHITE}").strip()
             try:
                 with open(file_path, 'r') as file:
                     domains = [line.strip() for line in file if line.strip()]
                 probe = DomainProbe()
-                probe.probe_domains(domains)
-                exit()
+                probe_results = probe.probe_domains(domains)  # Capture the results
+
+                save_choice = input(f"\n{Fore.RED}[{Fore.WHITE}!{Fore.LIGHTRED_EX}]{Fore.RED} Do you want to save live domains to a file? (y/n): {Fore.WHITE}").strip().lower()
+
+                if save_choice == 'y':
+                    save_file = input(f"{Fore.RED}[{Fore.WHITE}!{Fore.LIGHTRED_EX}]{Fore.RED} Enter filename to save live domains: {Fore.WHITE}").strip()
+                    with open(save_file, 'w') as file:
+                        file.write("\n".join(probe.live_domains))  # Access live_domains from probe
+                    print(f"\n{Fore.RED}[!{Fore.LIGHTRED_EX}]{Fore.RED} Live domains saved successfully to {save_file}!{Style.RESET_ALL}")  # Include filename in the success message
+                    break  # Terminate the loop after saving
+
+                else:
+                    print(f"\n{Fore.RED}[!{Fore.LIGHTRED_EX}]{Fore.RED} Live domains not saved.{Style.RESET_ALL}")
+                    break  # Terminate the loop after not saving
+
             except FileNotFoundError:
                 logging.error(f"{Fore.RED}[{Fore.WHITE}!{Fore.LIGHTRED_EX}]{Fore.RED} File not found: {file_path}{Style.RESET_ALL}")
+                break # Terminate the loop after file not found
+
         elif choice == "2":
             domain = input(f"{Fore.LIGHTRED_EX}[{Fore.WHITE}!{Fore.RED}] Enter the domain: {Fore.WHITE}").strip()
             probe = DomainProbe()
-            probe.probe_domains([domain])
-            exit()
+            probe.probe_results = probe.probe_domains([domain]) # Capture the results
+
+            save_choice = input(f"\n{Fore.RED}[{Fore.WHITE}!{Fore.LIGHTRED_EX}]{Fore.RED} Do you want to save live domains to a file? (y/n): {Fore.WHITE}").strip().lower()
+
+            if save_choice == 'y':
+                save_file = input(f"{Fore.RED}[{Fore.WHITE}!{Fore.LIGHTRED_EX}]{Fore.RED} Enter filename to save live domains: {Fore.WHITE}").strip()
+                with open(save_file, 'w') as file:
+                    file.write("\n".join(probe.live_domains))  # Access live_domains from probe
+                print(f"\n{Fore.RED}[!{Fore.LIGHTRED_EX}]{Fore.RED} Live domains saved successfully to {save_file}!{Style.RESET_ALL}") # Include filename in the success message
+                break  # Terminate the loop after saving
+            else:
+                print(f"\n{Fore.RED}[{Fore.WHITE}!{Fore.LIGHTRED_EX}]{Fore.RED} Live domains not saved.{Style.RESET_ALL}")
+                break  # Terminate the loop after not saving
+
         elif choice == "3":
             print(f"{Fore.LIGHTRED_EX}[{Fore.WHITE}!{Fore.RED}]{Fore.RED} Exiting...{Style.RESET_ALL}")
-            break
+            break # Correctly terminate the loop
 
 if __name__ == '__main__':
     main()
